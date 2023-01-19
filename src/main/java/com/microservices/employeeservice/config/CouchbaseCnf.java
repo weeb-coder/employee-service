@@ -1,80 +1,50 @@
 package com.microservices.employeeservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class CouchbaseCnf extends AbstractCouchbaseConfiguration {
 
     @Autowired
-    private ApplicationContext context;
+    private Environment env;
 
-//    @Value("{app.couchbase.connection-string}")
+//    @Value("{app.couchbase.host}")
 //    private String connectionString;
 //
-//    @Value("{app.couchbase.user-name}")
+//    @Value("{app.couchbase.username}")
 //    private String username;
 //
 //    @Value("{app.couchbase.password}")
 //    private String password;
 //
-//    @Value("{app.couchbase.bucket-primary}")
+//    @Value("{app.couchbase.bucket-employee}")
 //    private String employeeBucket;
-//
-//    @Value("{app.couchbase.bucket-user}")
-//    private String employeeLeaveBucket;
+
 
     @Override
     public String getConnectionString() {
-        return "couchbase://127.0.0.1";
+        return env.getProperty("app.couchbase.host");
     }
 
     @Override
     public String getUserName() {
-        return "admin";
+        return env.getProperty("app.couchbase.username");
     }
 
     @Override
     public String getPassword() {
-        return "admin123";
+        return env.getProperty("app.couchbase.password");
     }
 
     @Override
     public String getBucketName() {
-        return "Employee";
+        return env.getProperty("app.couchbase.bucket-employee");
     }
 
-//    @Override
-//    protected void configureRepositoryOperationsMapping(RepositoryOperationsMapping mapping) {
-//        mapping.mapEntity(EmployeeLeaveEntity.class, getCouchbaseTemplate("EmployeeLeave"));
-////        mapping.mapEntity(EmployeeSalaryEntity.class, getCouchbaseTemplate("EmployeeSalary"));
-//    }
-//
-//    private CouchbaseTemplate getCouchbaseTemplate(String bucketName) {
-//        CouchbaseTemplate template = null;
-//        try {
-//            template = new CouchbaseTemplate(
-//                    couchbaseClientFactory(bucketName),
-//                    mappingCouchbaseConverter(
-//                            couchbaseMappingContext(customConversions()),
-//                            new CouchbaseCustomConversions(Collections.emptyList())
-//                    )
-//            );
-//            template.setApplicationContext(context);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return template;
-//    }
-//
-//    private CouchbaseClientFactory couchbaseClientFactory(String bucketName) {
-//        return new SimpleCouchbaseClientFactory(
-//                couchbaseCluster(
-//                        couchbaseClusterEnvironment()),
-//                        bucketName,
-//                        this.getScopeName()
-//        );
-//    }
 }

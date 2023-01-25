@@ -1,11 +1,14 @@
 package com.microservices.employeeservice.controller;
 
 import com.microservices.employeeservice.db.entity.EmployeeEntity;
+import com.microservices.employeeservice.model.Employee;
 import com.microservices.employeeservice.service.EmployeeService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,7 @@ public class EmployeeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @CircuitBreaker(name = "retrieve-all-employees", fallbackMethod = "retrieveAllEmployeesFallbackResponse")
     public List<EmployeeEntity> retrieveAllEmployees() {
         return employeeService.retrieveAllEmployees();
     }
@@ -47,5 +51,19 @@ public class EmployeeController {
     @DeleteMapping("/removeEmployee/{empId}")
     public void removeEmployee(@PathVariable("empId") String id) {
         employeeService.removeEmployee(id);
+    }
+
+    private List<Employee> retrieveAllEmployeesFallbackResponse(Exception e) {
+        Employee emp = new Employee
+                .EmployeeBuilder()
+                .setId("-999")
+                .setName("Doctor Strange")
+                .setDeptName("Surgeon")
+                .setAddress("Some random universe")
+                .setJoiningDate(LocalDate.of(1999, 10, 21))
+                .setBaseSalary(100000000)
+                .build();
+
+        return List.of(emp);
     }
 }

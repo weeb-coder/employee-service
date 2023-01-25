@@ -33,6 +33,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{empId}")
+    @CircuitBreaker(name = "retrieve-single-employee", fallbackMethod = "getEmployeeByIdFallbackResponse")
     public Optional<EmployeeEntity> getEmployeeById(@PathVariable("empId") String id) {
         return employeeService.getEmployeeById(id);
     }
@@ -65,5 +66,17 @@ public class EmployeeController {
                 .build();
 
         return List.of(emp);
+    }
+
+    private Optional<Employee> getEmployeeByIdFallbackResponse(Exception e) {
+        return Optional.ofNullable(new Employee
+                .EmployeeBuilder()
+                .setId("-99")
+                .setName("Doctor Strange")
+                .setDeptName("Surgeon")
+                .setAddress("Some random universe")
+                .setJoiningDate(LocalDate.of(1999, 10, 21))
+                .setBaseSalary(100000000)
+                .build());
     }
 }

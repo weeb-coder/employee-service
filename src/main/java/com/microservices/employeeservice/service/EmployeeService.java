@@ -2,9 +2,14 @@ package com.microservices.employeeservice.service;
 
 import com.microservices.employeeservice.db.entity.EmployeeEntity;
 import com.microservices.employeeservice.db.repository.EmployeeRepo;
+import com.microservices.employeeservice.kafka.EmployeeProducer;
+import com.microservices.employeeservice.model.Employee;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +19,16 @@ public class EmployeeService {
     @Autowired
     EmployeeRepo repo;
 
+    @Autowired
+    EmployeeProducer employeeProducer;
+
+    //    https://stackoverflow.com/questions/30401077/is-it-possile-to-cast-two-different-class-but-having-the-same-attributes
     public String saveEmployee(EmployeeEntity employee) {
-        repo.save(employee);
+        employeeProducer.sendMessage(employee);
+//        repo.save(employee);
         return "Employee id '" + employee.getId() + "' has been saved successfully";
     }
+
 
     public List<EmployeeEntity> retrieveAllEmployees() {
         return repo.findAll();

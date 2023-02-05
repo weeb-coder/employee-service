@@ -24,8 +24,7 @@ public class EmployeeService {
 
     //    https://stackoverflow.com/questions/30401077/is-it-possile-to-cast-two-different-class-but-having-the-same-attributes
     public String saveEmployee(EmployeeEntity employee) {
-        employeeProducer.sendMessage(employee);
-//        repo.save(employee);
+        repo.save(employee);
         return "Employee id '" + employee.getId() + "' has been saved successfully";
     }
 

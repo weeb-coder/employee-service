@@ -1,7 +1,6 @@
-package com.microservices.employeeservice.kafka;
+package com.microservices.employeeservice.service;
 
 import com.microservices.employeeservice.db.entity.EmployeeEntity;
-import com.microservices.employeeservice.model.Employee;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

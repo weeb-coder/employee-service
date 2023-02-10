@@ -1,6 +1,7 @@
-package com.microservices.employeeservice.kafka;
+package com.microservices.employeeservice.controller;
 
 import com.microservices.employeeservice.db.entity.EmployeeEntity;
+import com.microservices.employeeservice.service.EmployeeProducer;
 import com.microservices.employeeservice.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/kafka")
+@RequestMapping("/kafka/employees")
 public class KafkaMessageController {
 
     private static final Logger LOG = LoggerFactory.getLogger(KafkaMessageController.class);
